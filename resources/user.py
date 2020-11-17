@@ -2,22 +2,6 @@ import sqlite3
 from flask_restful import Resource,reqparse
 from models.user import UserModel
 
-    
-class GetAllUsers(Resource):
-    def get(self):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        query="SELECT username FROM users"
-        result = cursor.execute(query)
-
-        users= []
-        for row in result:
-            users.append(row[0])
-        connection.close
-    
-        return {"users": users}
-        
-
 class UserRegister(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('username',
@@ -40,4 +24,7 @@ class UserRegister(Resource):
         user.save_to_db()
         return {"message":"User created successfully"},201
 
-         
+    
+class GetAllUsers(Resource):
+    def get(self):
+        return{"users":[user.json() for user in UserModel.query.all()]}

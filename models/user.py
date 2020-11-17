@@ -1,4 +1,4 @@
-import sqlite3
+#import sqlite3
 from db import db
 
 
@@ -16,6 +16,12 @@ class UserModel(db.Model): # this class now has the ability to interact with sql
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+    
+    def json(self): # necessary to hide your password though
+        return {
+            'username':self.username,
+            'password': self.password
+            }
     
     @classmethod
     def find_by_username(cls, username):
