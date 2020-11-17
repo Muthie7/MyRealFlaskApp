@@ -13,16 +13,6 @@ class UserModel(db.Model): # this class now has the ability to interact with sql
         self.username = username
         self.password = password
     
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
-    
-    def json(self): # necessary to hide your password though
-        return {
-            'username':self.username,
-            'password': self.password
-            }
-    
     @classmethod
     def find_by_username(cls, username):
         return UserModel.query.filter_by(username=username).first()
@@ -30,3 +20,16 @@ class UserModel(db.Model): # this class now has the ability to interact with sql
     @classmethod
     def find_by_id(cls,_id):
         return UserModel.query.filter_by(id=id).first()
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+    
+    def json(self): # necessary to hide your password though
+        return {
+            'username':self.username
+            }

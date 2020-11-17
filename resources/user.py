@@ -25,6 +25,23 @@ class UserRegister(Resource):
         return {"message":"User created successfully"},201
 
     
-class GetAllUsers(Resource):
+class UsersList(Resource):
     def get(self):
         return{"users":[user.json() for user in UserModel.query.all()]}
+
+class OneUser(Resource):
+    def get(self,name):
+        user = UserModel.find_by_username(name)
+        if user:   
+            return user.json()
+        else:
+            return{"message":f"The user '{name}' Not Found"}
+
+    def delete(self,name): #DEBUG
+        user = UserModel.find_by_username(name)
+        if user:
+            user.delete_from_db()
+            #return{"message":"User deleted"}
+        return{"users":[x.json() for x in UserModel.query.all()]}
+       
+    
